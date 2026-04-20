@@ -1,0 +1,9 @@
+../Drivers/BSP/Camera/camera.c:56:9:Camera_WriteReg	40	static
+../Drivers/BSP/Camera/camera.c:71:9:Camera_ReadReg	32	static
+../Drivers/BSP/Camera/camera.c:84:9:Camera_WriteRegb2	32	static
+../Drivers/BSP/Camera/camera.c:97:9:Camera_ReadRegb2	40	static
+../Drivers/BSP/Camera/camera.c:110:9:Camera_WriteRegList	24	static
+../Drivers/BSP/Camera/camera.c:125:9:Camera_read_id	24	static
+../Drivers/BSP/Camera/camera.c:150:6:Camera_Reset	24	static
+../Drivers/BSP/Camera/camera.c:160:6:Camera_XCLK_Set	72	static
+../Drivers/BSP/Camera/camera.c:235:6:Camera_Init_Device	16	static
