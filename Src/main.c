@@ -32,14 +32,15 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "camera.h"
-#include "lcd.h"
+#include "st7789_lcd.h"
 #include <string.h>
 #include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+#define LCD_ShowString	LCD7789_ShowString
+#define LCD_Test		LCD7789_Test
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -61,7 +62,7 @@
 uint8_t camera_buf[CAM_FRAME_WIDTH * CAM_FRAME_HEIGHT * CAM_PIXEL_BYTES] __attribute__((section(".RAM_D2")));
 
 // FATFS
-FATFS fs __attribute__((section(".RAM_D2"), aligned(32)));
+//FATFS fs __attribute__((section(".RAM_D2"), aligned(32)));
 FIL fil __attribute__((section(".RAM_D2"), aligned(32)));
 UINT bw;
 /* USER CODE END PV */
@@ -172,7 +173,7 @@ uint8_t Camera_Capture(void) {
 	memcpy(camera_buf, pic, sizeof(pic));
 
 	// CONTINUOUS 모드 재개
-	(&hdcmi);
+	HAL_DCMI_Resume(&hdcmi);
 
 	printf("Capture OK\r\n");
 	return 1;
@@ -258,18 +259,18 @@ void SD_WriteTest(void) {
 	// SD 카드 상태 먼저 확인
 	HAL_SD_CardStateTypeDef cardState = HAL_SD_GetCardState(&hsd1);
 	sprintf(resultMsg, "CardState: %ld   ", cardState);
-	LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12, (uint8_t*) resultMsg);
+	LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12, (uint8_t*) resultMsg);
 	HAL_Delay(200);
 
 	// hsd1 에러 상태 확인
 	sprintf(resultMsg, "SD Err: %lu   ", hsd1.ErrorCode);
-	LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12, (uint8_t*) resultMsg);
+	LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12, (uint8_t*) resultMsg);
 	HAL_Delay(200);
 
 	// 1. 마운트
 	res = f_mount(&fs, "", 1);
 	sprintf(resultMsg, "Mount: %d   ", res);
-	LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12, (uint8_t*) resultMsg);
+	LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12, (uint8_t*) resultMsg);
 	HAL_Delay(100);
 	if (res != FR_OK)
 		return;
@@ -277,7 +278,7 @@ void SD_WriteTest(void) {
 	// 2. 파일 열기
 	res = f_open(&testFile, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
 	sprintf(resultMsg, "Open: %d   ", res);
-	LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12, (uint8_t*) resultMsg);
+	LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12, (uint8_t*) resultMsg);
 	HAL_Delay(100);
 	if (res != FR_OK)
 		return;
@@ -285,17 +286,17 @@ void SD_WriteTest(void) {
 	// 3. 쓰기
 	res = f_write(&testFile, testData, strlen(testData), &bw);
 	sprintf(resultMsg, "Write: %d (%dB)", res, bw);
-	LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12, (uint8_t*) resultMsg);
+	LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12, (uint8_t*) resultMsg);
 	HAL_Delay(100);
 
 	// 4. 닫기
 	f_close(&testFile);
 
 	if (res == FR_OK && bw > 0) {
-		LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12,
+		LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12,
 				(uint8_t*) "SD Test PASS!  ");
 	} else {
-		LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12,
+		LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12,
 				(uint8_t*) "SD Test FAIL!  ");
 	}
 	HAL_Delay(200);
@@ -355,7 +356,7 @@ int main(void) {
 	HAL_Delay(3000);
 
 	sprintf((char*) &text, "Camera Not Found");
-	LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 16, text);
+	LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 16, text);
 
 	//	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
 	//	HAL_Delay(10);
@@ -365,11 +366,11 @@ int main(void) {
 	Camera_Init_Device(&hi2c1, FRAMESIZE_QQVGA2);
 	#endif
 	//clean Ypos 58
-	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 58, ST7735Ctx.Width, 16, BLACK);
+	ST7789_LCD_Driver.FillRect(&st7789_pObj, 0, 58, ST7789Ctx.Width, 16, BLACK);
 
 	if (!SD_Mount()) {
 		// Error_Handler() 대신 경고만 표시하고 계속 진행
-		LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12,
+		LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12,
 				(uint8_t*) "SD Mount Fail");
 		HAL_Delay(2000);
 	}
@@ -380,12 +381,12 @@ int main(void) {
 	while (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_RESET) {
 
 		sprintf((char*) &text, "Camera id:0x%x   ", hcamera.device_id);
-		LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12, text);
+		LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12, text);
 
 		LED_Blink(5, 500);
 
 		sprintf((char*) &text, "LongPress K1 to Run");
-		LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12, text);
+		LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12, text);
 
 		LED_Blink(5, 500);
 	}
@@ -408,26 +409,26 @@ int main(void) {
 			sprintf(filename, "p%04lu.bmp", photo_count++);
 
 			// 상태 표시
-			LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12,
+			LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12,
 					(uint8_t*) "Capturing...");
 
 			if (Camera_Capture()) {
-				LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12,
+				LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12,
 						(uint8_t*) "Saving...");
 				uint8_t ret = Save_BMP(filename);
 
 				if (ret) {
-					LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12,
+					LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12,
 							(uint8_t*) "Save OK!");
 				} else {
-					LCD_ShowString(0, 58, ST7735Ctx.Width, 16, 12,
+					LCD_ShowString(0, 58, ST7789Ctx.Width, 16, 12,
 							(uint8_t*) "Save FAIL!");
 					FRESULT res = f_open(&fil, filename,
 					FA_CREATE_ALWAYS | FA_WRITE);
 					if (res != FR_OK) {
 						char errMsg[32];
 						sprintf(errMsg, "Open Fail:%d", res);
-						LCD_ShowString(0, 46, ST7735Ctx.Width, 16, 12,
+						LCD_ShowString(0, 46, ST7789Ctx.Width, 16, 12,
 								(uint8_t*) errMsg);
 						return 0;
 					}
@@ -435,8 +436,8 @@ int main(void) {
 			}
 
 #ifdef TFT96
-			ST7735_FillRGBRect(&st7735_pObj, 0, 0, (uint8_t*) &pic[20][0],
-					ST7735Ctx.Width, 80);
+			ST7789_FillRGBRect(&st7789_pObj, 0, 0, (uint8_t*) &pic[20][0],
+					ST7789Ctx.Width, 80);
 #elif TFT18
 			ST7735_FillRGBRect(&st7735_pObj,0,0,(uint8_t *)&pic[0][0], ST7735Ctx.Width, ST7735Ctx.Height);
 			#endif

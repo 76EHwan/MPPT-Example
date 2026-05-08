@@ -43,8 +43,8 @@ Src/main.o: ../Src/main.c ../Inc/main.h \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../Inc/sd_diskio.h \
  ../Inc/i2c.h ../Inc/sdmmc.h ../Inc/spi.h ../Inc/tim.h ../Inc/gpio.h \
- ../Drivers/BSP/Camera/camera.h ../Drivers/BSP/ST7735/lcd.h \
- ../Drivers/BSP/ST7735/st7735.h ../Drivers/BSP/ST7735/st7735_reg.h
+ ../Drivers/BSP/Camera/camera.h ../Drivers/BSP/ST7789/st7789_lcd.h \
+ ../Drivers/BSP/ST7789/st7789.h ../Drivers/BSP/SDcard/SDcard.h
 ../Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Inc/stm32h7xx_hal_conf.h:
@@ -101,6 +101,6 @@ Src/main.o: ../Src/main.c ../Inc/main.h \
 ../Inc/tim.h:
 ../Inc/gpio.h:
 ../Drivers/BSP/Camera/camera.h:
-../Drivers/BSP/ST7735/lcd.h:
-../Drivers/BSP/ST7735/st7735.h:
-../Drivers/BSP/ST7735/st7735_reg.h:
+../Drivers/BSP/ST7789/st7789_lcd.h:
+../Drivers/BSP/ST7789/st7789.h:
+../Drivers/BSP/SDcard/SDcard.h:

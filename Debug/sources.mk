@@ -23,7 +23,9 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Drivers/BSP/Camera \
+Drivers/BSP/SDcard \
 Drivers/BSP/ST7735 \
+Drivers/BSP/ST7789 \
 Drivers/STM32H7xx_HAL_Driver/Src \
 Middlewares/Third_Party/FatFs/src \
 Middlewares/Third_Party/FatFs/src/option \

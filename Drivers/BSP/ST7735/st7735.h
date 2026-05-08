@@ -91,6 +91,9 @@ typedef struct
 	uint8_t					Type;
 } ST7735_Ctx_t;
 
+extern ST7735_Ctx_t ST7735Ctx;
+
+
 typedef struct
 {
   /* Control functions */
@@ -152,9 +155,9 @@ typedef struct
  *  Possible values of Display Orientation
  */
 #define ST7735_ORIENTATION_PORTRAIT         0x00U /* Portrait orientation choice of LCD screen               */
-#define ST7735_ORIENTATION_PORTRAIT_ROT180  0x01U /* Portrait rotated 180° orientation choice of LCD screen  */
+#define ST7735_ORIENTATION_PORTRAIT_ROT180  0x01U /* Portrait rotated 180ï¿½ orientation choice of LCD screen  */
 #define ST7735_ORIENTATION_LANDSCAPE        0x02U /* Landscape orientation choice of LCD screen              */
-#define ST7735_ORIENTATION_LANDSCAPE_ROT180 0x03U /* Landscape rotated 180° orientation choice of LCD screen */
+#define ST7735_ORIENTATION_LANDSCAPE_ROT180 0x03U /* Landscape rotated 180ï¿½ orientation choice of LCD screen */
 
 /**
  *  @brief  Possible values of pixel data format (ie color coding) 

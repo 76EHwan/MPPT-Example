@@ -39,8 +39,13 @@ Drivers/BSP/Camera/camera.o: ../Drivers/BSP/Camera/camera.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h ../Inc/tim.h \
  ../Inc/main.h ../Drivers/BSP/Camera/ov7670.h \
  ../Drivers/BSP/Camera/ov2640.h ../Drivers/BSP/Camera/ov7725.h \
- ../Drivers/BSP/Camera/ov5640.h ../Drivers/BSP/ST7735/lcd.h \
- ../Drivers/BSP/ST7735/st7735.h ../Drivers/BSP/ST7735/st7735_reg.h
+ ../Drivers/BSP/Camera/ov5640.h ../Drivers/BSP/ST7789/st7789_lcd.h \
+ ../Drivers/BSP/ST7789/st7789.h ../Drivers/BSP/SDcard/SDcard.h \
+ ../Inc/fatfs.h ../Middlewares/Third_Party/FatFs/src/ff.h \
+ ../Middlewares/Third_Party/FatFs/src/integer.h ../Inc/ffconf.h \
+ ../Inc/bsp_driver_sd.h ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
+ ../Middlewares/Third_Party/FatFs/src/diskio.h \
+ ../Middlewares/Third_Party/FatFs/src/ff.h ../Inc/sd_diskio.h
 ../Drivers/BSP/Camera/camera.h:
 ../Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -86,6 +91,15 @@ Drivers/BSP/Camera/camera.o: ../Drivers/BSP/Camera/camera.c \
 ../Drivers/BSP/Camera/ov2640.h:
 ../Drivers/BSP/Camera/ov7725.h:
 ../Drivers/BSP/Camera/ov5640.h:
-../Drivers/BSP/ST7735/lcd.h:
-../Drivers/BSP/ST7735/st7735.h:
-../Drivers/BSP/ST7735/st7735_reg.h:
+../Drivers/BSP/ST7789/st7789_lcd.h:
+../Drivers/BSP/ST7789/st7789.h:
+../Drivers/BSP/SDcard/SDcard.h:
+../Inc/fatfs.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../Middlewares/Third_Party/FatFs/src/integer.h:
+../Inc/ffconf.h:
+../Inc/bsp_driver_sd.h:
+../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h:
+../Middlewares/Third_Party/FatFs/src/diskio.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../Inc/sd_diskio.h:
