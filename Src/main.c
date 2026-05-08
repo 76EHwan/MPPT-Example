@@ -71,16 +71,20 @@ UINT bw;
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 #ifdef TFT96
-// QQVGA
-#define FrameWidth 160
-#define FrameHeight 120
+#define FrameWidth   160    // 카메라 실제 출력 (QQVGA)
+#define FrameHeight  120
+#define LCD_W        240    // LCD landscape 폭
+#define LCD_H        135    // LCD landscape 높이
 #elif TFT18
-// QQVGA2
-#define FrameWidth 128
-#define FrameHeight 160
+#define FrameWidth   128
+#define FrameHeight  160
+#define LCD_W        160
+#define LCD_H        128
 #endif
 // picture buffer
-uint16_t pic[FrameWidth][FrameHeight];
+uint16_t pic[FrameHeight][FrameWidth] __attribute__((aligned(32)));
+uint16_t lcd_buf[LCD_H][LCD_W] __attribute__((aligned(32)));
+
 uint32_t DCMI_FrameIsReady;
 uint32_t Camera_FPS = 0;
 /* USER CODE END PFP */
@@ -391,8 +395,8 @@ int main(void) {
 		LED_Blink(5, 500);
 	}
 
-	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t) &pic,
-	FrameWidth * FrameHeight * 2 / 4);
+	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t) pic,
+			sizeof(pic) / 4);
 
 	/* USER CODE END 2 */
 
@@ -436,14 +440,15 @@ int main(void) {
 			}
 
 #ifdef TFT96
-			ST7789_FillRGBRect(&st7789_pObj, 0, 0, (uint8_t*) &pic[20][0],
-					ST7789Ctx.Width, 80);
-#elif TFT18
-			ST7735_FillRGBRect(&st7735_pObj,0,0,(uint8_t *)&pic[0][0], ST7735Ctx.Width, ST7735Ctx.Height);
-			#endif
-			sprintf((char*) &text, "%ldFPS", Camera_FPS);
-			LCD_ShowString(5, 5, 60, 16, 12, text);
-
+			for (int dy = 0; dy < LCD_H; dy++) {
+				int sy = (dy * FrameHeight) / LCD_H;  // 0~119 매핑
+				for (int dx = 0; dx < LCD_W; dx++) {
+					lcd_buf[dy][dx] = pic[sy][(dx * FrameWidth) / LCD_W]; // 0~159 매핑
+				}
+			}
+			ST7789_FillRGBRect(&st7789_pObj, 0, 0, (uint8_t*) lcd_buf, LCD_W,
+					LCD_H);
+#endif
 //			LED_Blink(1, 1);
 		}
 		// HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);

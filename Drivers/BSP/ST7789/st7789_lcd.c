@@ -44,7 +44,7 @@ ST7789_Object_t st7789_pObj;
 void LCD7789_Test(void) {
 
 #if defined(TFT135x240)
-	ST7789Ctx.Orientation = ST7789_ORIENTATION_PORTRAIT_ROT180;
+	ST7789Ctx.Orientation = ST7789_ORIENTATION_LANDSCAPE;
 	ST7789Ctx.Type = ST7789_135x240_screen;
 #elif defined(TFT240x240)
 	ST7789Ctx.Orientation = ST7789_ORIENTATION_PORTRAIT;
